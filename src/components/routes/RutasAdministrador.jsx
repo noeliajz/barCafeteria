@@ -6,23 +6,24 @@ import EditarProducto from "../views/producto/EditarProducto";
 const RutasAdministrador = () => {
   return (
     <>
-      <Routes>
-        <Route
+    <Routes>
+    <Route
           exact
           path="/"
           element={<Administrador></Administrador>}
         ></Route>
-        <Route
+     <Route
           exact
           path="/crear-producto"
           element={<CrearProducto></CrearProducto>}
         ></Route>
-        <Route
+      <Route
           exact
-          path="/editar-producto/:id"
+          path="/editar-producto"
           element={<EditarProducto></EditarProducto>}
         ></Route>
-      </Routes>
+    </Routes>
+   
     </>
   );
 };
