@@ -29,11 +29,11 @@ function App() {
           element={<DetalleProducto></DetalleProducto>}
         ></Route>
         <Route
-          path="/administrador/*"
+          path="/administrador"
           element={
-            <RutasProtegidas>
+           // <RutasProtegidas>
               <RutasAdministrador></RutasAdministrador>
-            </RutasProtegidas>
+          //  </RutasProtegidas>
           }
         ></Route>
       
