@@ -1,7 +1,6 @@
-<<<<<<< HEAD
+
 node_modules
-=======
-# Logs
+
 logs
 *.log
 npm-debug.log*
@@ -15,7 +14,6 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -25,4 +23,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
->>>>>>> b7aa0939b1913cfdc1d9c7ab25c5aaefcadecf16
