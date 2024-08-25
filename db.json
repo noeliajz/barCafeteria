@@ -1,7 +1,7 @@
 {
   "productos": [
     {
-      "id": 1,
+      "id": "1",
       "nombreProducto": "Café",
       "precio": 300,
       "categoria": "bebida caliente",
@@ -13,29 +13,54 @@
       "precio": "350",
       "imagen": "https://images.pexels.com/photos/1672304/pexels-photo-1672304.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
       "categoria": "dulce",
-      "id": 2
+      "id": "2"
     },
     {
       "nombreProducto": "té de manzanilla",
       "precio": "150",
       "imagen": "https://images.pexels.com/photos/1672304/pexels-photo-1672304.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
       "categoria": "bebida caliente",
-      "id": 3
+      "id": "3"
     },
     {
       "nombreProducto": "1 kg de pan",
       "precio": "500",
       "imagen": "https://images.pexels.com/photos/1672304/pexels-photo-1672304.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
       "categoria": "salado",
-      "id": 4
+      "id": "4"
     }
   ],
   "usuarios": [
     {
-      "id": 1,
+      "id": "1",
       "nombreUsuario": "admin",
       "email": "admin@rollingcode.com",
       "password": "123456aA"
+    },
+    {
+      "id": "3070",
+      "email": "estefania.zelaya1@gmail.com",
+      "password": "12345678Aa"
+    },
+    {
+      "id": "8ad8",
+      "email": "estefania.zelaya1@gmail.com",
+      "password": "12345678Aa"
+    },
+    {
+      "id": "d168",
+      "email": "estefania.zelaya1@gmail.com",
+      "password": "12345678Aa"
+    },
+    {
+      "id": "888e",
+      "email": "estefania@gmail.com",
+      "password": "Iris130200"
+    },
+    {
+      "id": "bf7e",
+      "email": "estefania@gmail.com",
+      "password": "Iris130200"
     }
   ]
 }

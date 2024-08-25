@@ -37,7 +37,7 @@ const Login = ({setUsuarioLogueado}) => {
         <Card.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>Ingresar email</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Ingrese un email"
@@ -55,7 +55,7 @@ const Login = ({setUsuarioLogueado}) => {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Ingresar contraseña</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password"

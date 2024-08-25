@@ -10,7 +10,7 @@ const Menu = ({usuarioLogueado, setUsuarioLogueado}) => {
     navegacion('/')
   }
   return (
-    <Navbar bg="danger" variant="dark" expand="lg">
+    <Navbar style={{background:"#4B6587"}} variant="dark" expand="lg">
       <Container>
         <Navbar.Brand as={Link} to='/'>Cafecito</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -11,6 +11,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import RutasProtegidas from "./components/routes/RutasProtegidas";
 import RutasAdministrador from "./components/routes/RutasAdministrador";
+import CrearProducto from "./components/views/producto/CrearProducto";
+import EditarProducto from "./components/views/producto/EditarProducto";
 
 function App() {
   const usuarioSessionStorage = JSON.parse(sessionStorage.getItem('usuario')) || {}
@@ -36,7 +38,7 @@ function App() {
             </RutasProtegidas>
           }
         ></Route>
-      
+        
         <Route path="*" element={<Error404></Error404>}></Route>
       </Routes>
       <Footer></Footer>
