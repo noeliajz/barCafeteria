@@ -1,7 +1,12 @@
-
+import { useForm } from "react-hook-form";
 import { Button, Form } from "react-bootstrap";
 
 const Registro = () => {
+  const {register, handleSubmit, formState: {errors}, reset}=useForm()
+  const onSubmit = (usuario)=>{
+    console.log(usuario)
+    reset()
+  }
   return (
     <div className="mt-5 mainSection">
       <h3 className="text-center">Registro</h3>
@@ -12,10 +17,38 @@ const Registro = () => {
               <Form.Control
                 type="text"
                 placeholder="Ingrese un nombre de usuario"
+                {
+                  ...register('email',{
+                    required:'el email es obligatorio',
+                    pattern:/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=? ^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a -z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+                    message:'el email debe ser obligatorio'
+
+                  })
+                }
+                
+              
+
               />
+                <Form.Text className="text-danger">
+                  {
+                    errors.email?.message
+                  }
+                </Form.Text>
             </Form.Group>
             <Form.Group className="mb-2">
-              <Form.Control placeholder="Ingrese un email" />
+              <Form.Control placeholder="Ingrese una contraseña"
+              {
+                ...register('password',{
+                  required:'la contraseña es obligatorio',
+                  pattern:/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/,
+                  message:'El password debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula. No puede tener otros símbolos.'
+
+                })
+              }
+               />
+              <Form.Text className="text-danger">
+               {errors.password?.message}
+            </Form.Text>
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Control type="password" placeholder="Ingrese un password" />
