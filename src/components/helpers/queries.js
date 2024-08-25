@@ -7,28 +7,58 @@ POST me permiten crear un elemento
 PUT / PATCH  me permiten editar un elemento
 DELETE me permiten eliminar un elemento
 */ 
-export const iniciarSesion = async (usuario)=>{
-    try{
-        const respuesta = await fetch(URL_usuario,{
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(usuario)
-        });
 
-        const datos = await respuesta.json();
-        return {
-            status: respuesta.status,
-            nombreUsuario: datos.nombreUsuario 
-        }
+// Define la URL de la API donde se obtienen los usuarios
+const URL_usuarios = 'http://localhost:3004/usuarios'; // Reemplaza con tu URL real
+
+export const iniciarSesion = async (usuario) => {
+    try {
+        // Realiza la petición a la API
+        const respuesta = await fetch(URL_usuario);
         
-    }catch(error){
-       console.log(error); 
-       return null;
-    }
-} 
+        // Verifica si la respuesta fue exitosa
+        if (!respuesta.ok) {
+            throw new Error('Error en la respuesta de la API');
+        }
 
+        // Convierte la respuesta a JSON
+        const listaUsuarios = await respuesta.json();
+        
+        // Busca el usuario en la lista de usuarios
+        const usuarioBuscado = listaUsuarios.find((itemUsuario) => {
+            return itemUsuario.email === usuario.email;
+        });
+        
+        // Verifica si el usuario fue encontrado
+        if (usuarioBuscado) {
+            // Verifica la contraseña del usuario
+            if (usuarioBuscado.password === usuario.password) {
+                return usuarioBuscado; // Devuelve el usuario si la contraseña es correcta
+            } else {
+                console.log('Error: Contraseña incorrecta');
+                return null; // Devuelve null si la contraseña es incorrecta
+            }
+        } else {
+            console.log('Error: El email no existe');
+            return null; // Devuelve null si el email no existe
+        }
+    } catch (error) {
+        // Registra cualquier error que ocurra durante el proceso
+        console.error('Error al iniciar sesión:', error);
+        return null; // Devuelve null en caso de error
+    }
+};
+
+
+        
+        
+        
+        
+        
+        
+   
+
+ 
 export const obtenerListaProductos = async()=>{
     try{
         const respuesta = await fetch(URL_producto);
@@ -76,7 +106,7 @@ export const borrarProducto = async(id)=>{
     }catch(error){
         console.log(error)
     }
-}
+} 
 
 export const obtenerProducto = async(id)=>{
     try{
@@ -86,4 +116,4 @@ export const obtenerProducto = async(id)=>{
     }catch(error){
         console.log(error)
     }
-}
+} 

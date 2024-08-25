@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import { Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const Registro = () => {
   const {register, handleSubmit, formState: {errors}, reset}=useForm()
+  const navegacion = useNavigate();
+
   const onSubmit = (usuario)=>{
     console.log(usuario)
     reset()
@@ -36,7 +39,7 @@ const Registro = () => {
                 </Form.Text>
             </Form.Group>
             <Form.Group className="mb-2">
-              <Form.Control placeholder="Ingrese una contraseña"
+              <Form.Control type="password"  placeholder="Ingrese una contraseña"
               {
                 ...register('password',{
                   required:'la contraseña es obligatorio',
