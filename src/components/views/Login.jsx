@@ -1,88 +1,133 @@
-import { Form, Button, Container, Card } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Col from "react-bootstrap/esm/Col";
+import Container from "react-bootstrap/esm/Container";
+import Row from "react-bootstrap/esm/Row";
 import { useNavigate } from "react-router-dom";
-import { iniciarSesion } from "../helpers/queries"; // Asegúrate de que esta función esté implementada correctamente.
+import Swal from "sweetalert2";
 
-const Login = ({ setUsuarioLogueado }) => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const navegacion = useNavigate();
+const FormLogin = () => {
+  const navigate = useNavigate();
 
-  const onSubmit = async (usuario) => {
-    console.log(usuario);
-    try {
-      const respuesta = await iniciarSesion(usuario);
-      if (respuesta && respuesta.status === 200) {
-        sessionStorage.setItem('usuario', JSON.stringify(respuesta.data));
-        setUsuarioLogueado(respuesta.data);
-        reset();
-        navegacion('/administrador');
-      } else {
-        // Mostrar un mensaje de error
-        Swal.fire(
-          'Error',
-          'El email o password son incorrectos',
-          'error'
-        );
-      }
-    } catch (error) {
-      Swal.fire(
-        'Error',
-        'Ocurrió un error en la conexión',
-        'error'
-      );
+  const [formInputs, setFormInputs] = useState({
+    user: '',
+    pass: ''
+  });
+
+  const [userInput, setUserInput] = useState(false);
+  const [passInput, setPassInput] = useState(false);
+
+  const handleChange = (ev) => {
+    setFormInputs({ ...formInputs, [ev.target.name]: ev.target.value });
+    
+    if (ev.target.name === 'user' && ev.target.value) {
+      setUserInput(false);
+    } else if (ev.target.name === 'pass' && ev.target.value) {
+      setPassInput(false);
     }
   };
 
-  return (
-    <Container className="mainSection">
-      <Card className="my-5">
-        <Card.Header as="h5">Login</Card.Header>
-        <Card.Body>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Ingresar email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Ingrese un email"
-                {...register('email', {
-                  required: 'El email es un dato obligatorio',
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                    message: 'El email debe tener el siguiente formato: mail@dominio.com'
-                  }
-                })}
-              />
-              <Form.Text className="text-danger">
-                {errors.email?.message}
-              </Form.Text>
-            </Form.Group>
+  const handleClick = async (ev) => {
+    ev.preventDefault();
+    if (formInputs.user) {
+      if (formInputs.pass) {
+        setUserInput(false);
+        setPassInput(false);
 
+        try {      
+           const res = await fetch('http://localhost:3500/apiCafe/login', {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              usuario: formInputs.user, 
+              pass: formInputs.pass
+            })
+          });
+
+          const data = await res.json();
+          if (data.userExist) {
+            localStorage.setItem('token', data.userExist.token);
+            localStorage.setItem('role', data.userExist.role);
+            localStorage.setItem('idAgenda', data.userExist.idAgenda);
+            console.log(data.userExist)
+            if (data.userExist.role === 'admin') {
+              navigate('/adminPage');
+            } else if (data.userExist.role === 'user') {
+              navigate('/amedicalspecialty');
+            }
+          } else {
+            console.error("Usuario no encontrado o credenciales incorrectas");
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "Error en la solicitud de login",
+              text: "Usuario no encontrado o credenciales incorrectas" ,
+              showConfirmButton: false,
+              timer: 1380,
+            });
+          }
+        } catch (error) {
+          console.error("Error en la solicitud de login:", error);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error",
+            text: "Error en la solicitud de login: ", error ,
+            showConfirmButton: false,
+            timer: 1380,
+          });
+        }
+      } else {
+        setPassInput(true);
+      }
+    } else {
+      setUserInput(true);
+      setPassInput(true);
+    }
+  };
+
+  useEffect(() => {
+    console.log(formInputs);
+  }, [formInputs]);
+
+  return (
+    <Container fluid style={{ background: "#E1F7F5" }}>
+      <Row>
+        <Col className="d-flex justify-content-center">
+          <Form className="p-5 w-50 text-center">
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Ingresar correo electrónico</Form.Label>
+              <Form.Control
+                name="user"
+                onChange={handleChange}
+                className={userInput ? ' form-control is-invalid' : 'form-control'}
+                type="email"
+                placeholder=""
+              />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Ingresar contraseña</Form.Label>
               <Form.Control
+                name="pass"
+                onChange={handleChange}
+                className={passInput ? 'form-control is-invalid' : 'form-control'}
                 type="password"
-                placeholder="Password"
-                {...register('password', {
-                  required: 'El password es obligatorio',
-                  pattern: {
-                    value: /^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/,
-                    message: 'El password debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula. No puede tener otros símbolos.'
-                  }
-                })}
+                placeholder=""
               />
-              <Form.Text className="text-danger">
-                {errors.password?.message}
-              </Form.Text>
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button  style={{background:"#0E46A3", color:"#E1F7F5"}}  onClick={handleClick} type="submit">
               Ingresar
             </Button>
           </Form>
-        </Card.Body>
-      </Card>
+        </Col>
+      </Row>
     </Container>
   );
 };
 
-export default Login;
+export default FormLogin;
+
+

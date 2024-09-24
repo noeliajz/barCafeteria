@@ -19,7 +19,7 @@ const Menu = ({usuarioLogueado, setUsuarioLogueado}) => {
             <NavLink end className='nav-item nav-link' to='/'>Inicio</NavLink>
             <NavLink end className='nav-item nav-link' to='/registro'>Registro</NavLink>
             {
-              (usuarioLogueado.nombreUsuario)?
+              (usuarioLogueado.nombreCompleto)?
               <>
               <NavLink end className='nav-item nav-link' to='/administrador'>Administrador</NavLink>
               <Button variant="dark" onClick={cerrarSesion}>Logout</Button>

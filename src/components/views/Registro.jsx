@@ -13,7 +13,7 @@ const Registro = () => {
   };
 
   return (
-    <div className="mt-5 mainSection">
+    <div className="pt-5 mainSection" style={{background: "#F0E5CF"}}>
       <h3 className="text-center">Registro</h3>
       <div className="row justify-content-center">
         <div className="col-12 col-sm-8 col-md-6 col-xl-4">
