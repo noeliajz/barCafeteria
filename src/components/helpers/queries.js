@@ -1,52 +1,55 @@
 // llamar a una variable de entorno
-const URL_usuario = import.meta.env.VITE_API_USUARIO;
-const URL_producto = import.meta.env.VITE_API_PRODUCTO;
-/*
-GET devuelven una lista de elementos o un elemento
-POST me permiten crear un elemento
-PUT / PATCH  me permiten editar un elemento
-DELETE me permiten eliminar un elemento
-*/ 
+const URL_usuarioyproducto = import.meta.env.VITE_API_USUARIOYPRODUCTO;
 
-// Define la URL de la API donde se obtienen los usuarios
-const URL_usuarios = 'http://localhost:3004/usuarios'; // Reemplaza con tu URL real
 
-// helpers/queries.js
+
 export const iniciarSesion = async (usuario) => {
     try {
-      const response = await fetch('/db.json');
-      const data = await response.json();
-      
-      // Buscar en los usuarios de db.json
-      const usuarioEncontrado = data.usuarios.find(user => 
-        user.email === usuario.email && user.password === usuario.password
-      );
+      const respuesta = await fetch(`${URL_usuarioyproducto}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(usuario)
+      });
   
-      if (usuarioEncontrado) {
-        return { status: 200, data: usuarioEncontrado };
-      } else {
-        return { status: 401 }; // Usuario no autorizado
+      // Obtener el texto de la respuesta
+      const textoRespuesta = await respuesta.text();
+      
+      // Comprobar si la respuesta fue exitosa
+      if (!respuesta.ok) {
+        // Intentar analizar el texto como JSON
+        try {
+          const errorData = JSON.parse(textoRespuesta);
+          throw new Error(errorData.mensaje || 'Error en la respuesta del servidor');
+        } catch (parseError) {
+          throw new Error('Error en la respuesta del servidor: ' + textoRespuesta);
+        }
       }
+      
+      // Analizar el texto como JSON
+      const datos = JSON.parse(textoRespuesta);
+      
+      return {
+        status: respuesta.status,
+        nombreCompleto: datos.nombreCompleto || null,
+        mensaje: datos.mensaje || 'Respuesta vacía'
+      };
     } catch (error) {
-      console.error('Error en iniciarSesion:', error);
-      throw new Error('Error en la conexión con el servidor');
+      console.error("Error en iniciarSesion:", error);
+      return {
+        status: 500,
+        nombreCompleto: null,
+        mensaje: error.message || 'Error en la solicitud'
+      };
     }
   };
   
-
-
-        
-        
-        
-        
-        
-        
-   
-
+  
  
 export const obtenerListaProductos = async()=>{
     try{
-        const respuesta = await fetch(URL_producto);
+        const respuesta = await fetch(`${URL_usuarioyproducto}/productos`);
         const listaProductos = await respuesta.json();
         return listaProductos;
     }catch(error){
@@ -54,20 +57,36 @@ export const obtenerListaProductos = async()=>{
     }
 }
 
-export const crearProducto = async(producto)=>{
-    try{
-        const respuesta = await fetch(URL_producto,{
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(producto)
-        });
-      return respuesta; // el status de la respuesta 201
-    }catch(error){
-        console.log(error)
-    }
+export const crearProducto = async (producto) => {
+  try {
+      const respuesta = await fetch(`${URL_usuarioyproducto}/productos`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify(producto)
+      });
+
+      // Leer el cuerpo de la respuesta para obtener más detalles sobre el error
+      const respuestaTexto = await respuesta.text();
+
+      // Verificar si la respuesta fue exitosa (código de estado 200-299)
+      if (!respuesta.ok) {
+          throw new Error(`Error en la solicitud: ${respuesta.status}. Detalles: ${respuestaTexto}`);
+      }
+
+      // Retornar la respuesta en formato JSON
+      const datos = JSON.parse(respuestaTexto); // Cambiar a JSON.parse si la respuesta es un JSON
+      return datos;
+
+  } catch (error) {
+      // Manejo de errores
+      console.error("Error al crear el producto:", error);
+      // Puedes retornar un valor específico para indicar el error
+      return { error: error.message };
+  }
 }
+
 export const editarProducto = async(producto, id)=>{
     try{
         const respuesta = await fetch(URL_producto+'/'+id,{

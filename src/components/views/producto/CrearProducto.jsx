@@ -11,7 +11,6 @@ const CrearProducto = () => {
   } = useForm();
 
   const onSubmit = (productoNuevo) => {
-    console.log(productoNuevo);
     crearProducto(productoNuevo).then((respuesta)=>{
       if(respuesta.status === 201){
         Swal.fire('Producto creado', `El producto ${productoNuevo.nombreProducto} fue creado correctamente`, 'success');
@@ -73,7 +72,7 @@ const CrearProducto = () => {
           <Form.Label>Imagen URL*</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Ej: https://www.pexels.com/es-es/vans-en-blanco-y-negro-fuera-de-la-decoracion-para-colgar-en-la-pared-1230679/"
+            placeholder=""
             {...register("imagen", {
               required: "La imagen es obligatoria",
             })}
